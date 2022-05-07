@@ -12,6 +12,7 @@ import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Setter
 @Table(name = "account")
