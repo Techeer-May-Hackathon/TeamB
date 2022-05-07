@@ -2,6 +2,8 @@ plugins {
 	id 'org.springframework.boot' version '2.6.3'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id 'org.asciidoctor.convert' version '1.5.8'
+
 }
 
 group = 'com.techeer'
@@ -17,6 +19,11 @@ configurations {
 		extendsFrom developmentOnly
 	}
 }
+
+ext {
+	set('snippetsDir', file("build/generated-snippets"))
+}
+
 
 repositories {
 	mavenCentral()
@@ -42,6 +49,16 @@ dependencies {
 
 }
 
+tasks.named('compileJava') {
+	inputs.files(tasks.named('processResources'))
+}
+
 tasks.named('test') {
+	outputs.dir snippetsDir
 	useJUnitPlatform()
+}
+
+tasks.named('asciidoctor') {
+	inputs.dir snippetsDir
+	dependsOn test
 }
