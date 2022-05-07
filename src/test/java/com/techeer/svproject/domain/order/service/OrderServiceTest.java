@@ -17,8 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
@@ -100,16 +99,17 @@ class OrderServiceTest {
         assertAll(() -> assertEquals(expectOrderList, actualOrderList));
     }
 
+    void callDelete() {
+        orderService.delete(givenId);
+    }
+
     @Test
     @DisplayName("")
     void delete() {
         // given
-        OrderService mockOrderService = mock(OrderService.class);
-        doNothing().when(mockOrderService).delete(givenId);
+        doNothing().when(orderRepository).delete(any());
         // when
-        mockOrderService.delete(givenId);
         // then
-        verify(mockOrderService, times(1)).delete(givenId);
-
+        assertDoesNotThrow(this::callDelete);
     }
 }
