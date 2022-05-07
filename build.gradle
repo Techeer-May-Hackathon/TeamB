@@ -25,20 +25,21 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
-	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'mysql:mysql-connector-java'
-	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.mockito:mockito-all:1.10.19'
-	implementation 'com.google.guava:guava:31.0.1-jre'
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine' //junit 4 하위 호환을 위한 라이브러리 제거
+	}
+	implementation 'com.google.guava:guava:31.1-jre'
 	testImplementation 'org.slf4j:slf4j-log4j12:1.8.0-beta4'
-	testImplementation 'com.fasterxml.jackson.core:jackson-databind:2.12.3'
+
+	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
+
 }
 
 tasks.named('test') {
