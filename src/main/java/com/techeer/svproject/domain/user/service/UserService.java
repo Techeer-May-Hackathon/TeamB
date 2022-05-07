@@ -35,7 +35,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    @Transactional(readOnly = true) //
+    @Transactional(readOnly = true)
     public List<UserResponseDto> findAll() {
         return userRepository.findAll()
                 .stream()
@@ -43,7 +43,7 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional(readOnly = true) //
+    @Transactional(readOnly = true)
     public UserResponseDto findByEmail(String email) {
         User user = userRepository.findByEmail(email);
         return UserResponseDto.fromEntity(user);
