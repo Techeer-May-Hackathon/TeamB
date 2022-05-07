@@ -10,12 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
 
 @DataJpaTest
 @DisplayName("오더 리포지토리 테스트")
@@ -26,11 +26,11 @@ class OrderRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
-    private User actualUser;
+    private User expectUser;
 
     private Order givenOrder;
 
-    private Order actualOrder;
+    private Order expectOrder;
 
     @BeforeEach
     void setup() {
@@ -44,15 +44,15 @@ class OrderRepositoryTest {
                 .address(null)
                 .build();
 
-        actualUser = userRepository.save(givenUser);
+        expectUser = userRepository.save(givenUser);
 
         LocalDateTime givenLocalDateTime = LocalDateTime.now();
 
         givenOrder = Order.builder()
-                .user(actualUser)
+                .user(expectUser)
                 .orderDate(givenLocalDateTime)
                 .build();
-        actualOrder = orderRepository.save(givenOrder);
+        expectOrder = orderRepository.save(givenOrder);
     }
 
     @Test
@@ -61,10 +61,10 @@ class OrderRepositoryTest {
         // given
 
         // when
-        Order expectOrder = orderRepository.findById(actualOrder.getId()).get();
+        Order actualOrder = orderRepository.findById(expectOrder.getId()).get();
         // then
         assertAll(
-                () -> assertEquals(expectOrder, givenOrder)
+                () -> assertEquals(expectOrder, actualOrder)
         );
     }
 
@@ -82,8 +82,8 @@ class OrderRepositoryTest {
     }
 
     private Order deleteSomething() {
-        orderRepository.delete(actualOrder);
-        return orderRepository.findById(actualOrder.getId()).get();
+        orderRepository.delete(expectOrder);
+        return orderRepository.findById(expectOrder.getId()).get();
     }
 
     @Test
@@ -103,11 +103,14 @@ class OrderRepositoryTest {
     @DisplayName("유저 아이디로 오더 검색")
     void findAllByUserId() {
         // given
-
+        List<Order> expectOrderList = new ArrayList<>();
+        expectOrderList.add(expectOrder);
         // when
-        List<Order> expectOrderList = orderRepository.findAllByUserId(actualUser.getId());
+        List<Order> actualOrderList = orderRepository.findAllByUserId(expectUser.getId());
         // then
-        assertAll(() -> expectOrderList.forEach(expectOrder -> assertEquals(expectOrder, actualOrder)));
+//        assertArrayEquals(expectOrderList, actualOrderList);
+        assertIterableEquals(expectOrderList, actualOrderList);
+//        assertAll(() -> actualOrderList.forEach(actualOrder -> assertEquals(expectOrder, actualOrder)));
     }
 
     @Test
@@ -120,6 +123,5 @@ class OrderRepositoryTest {
         testOrderRepository.delete(givenOrder);
         // then
         verify(testOrderRepository, times(1)).delete(givenOrder);
-
     }
 }

@@ -24,14 +24,11 @@ class OrderMapperTest {
 
     @BeforeEach
     void setup() {
-        actualOrder = Order.builder()
-                .user(User.builder().build())
-                .orderDate(givenLocalDateTime)
-                .build();
-
         UUID givenId = new UUID(10L, 10L);
 
+        User givenUser = new User(givenId, "김", "영준", "Over@naver.com", "qwer12345!", 1023132312, null, null);
 
+        actualOrder = new Order(givenId, givenUser, null, givenLocalDateTime);
 
         actualOrderResponseDto = OrderResponseDto.builder()
                 .id(givenId)
@@ -65,8 +62,8 @@ class OrderMapperTest {
         OrderResponseDto expectOrderResponseDto = orderMapper.toResponseDto(actualOrder);
         // then
         assertAll(
-//                () -> assertEquals(expectOrderResponseDto.getId(), actualOrderResponseDto.getId()),
-//                () -> assertEquals(expectOrderResponseDto.getUserId(), actualOrderResponseDto.getUserId()),
+                () -> assertEquals(expectOrderResponseDto.getId(), actualOrderResponseDto.getId()),
+                () -> assertEquals(expectOrderResponseDto.getUserId(), actualOrderResponseDto.getUserId()),
                 () -> assertEquals(expectOrderResponseDto.getOrderDate(), actualOrderResponseDto.getOrderDate())
         );
     }

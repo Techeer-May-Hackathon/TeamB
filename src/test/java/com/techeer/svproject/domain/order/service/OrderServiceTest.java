@@ -33,18 +33,18 @@ class OrderServiceTest {
     @Mock
     private UserRepository userRepository;
 
-    private Order actualOrder;
+    private Order expectOrder;
 
-    private User actualUser;
+    private User expectUser;
 
-    private List<Order> actualOrderList;
+    private List<Order> expectOrderList;
     private UUID givenId;
 
     @BeforeEach
     void setup() {
         givenId = new UUID(10L, 10L);
 
-        actualUser = User.builder()
+        expectUser = User.builder()
                 .firstName("김")
                 .lastName("영준")
                 .email("Over@naver.com")
@@ -53,17 +53,17 @@ class OrderServiceTest {
                 .address(null)
                 .build();
 
-        actualOrder = Order.builder()
-                .user(actualUser)
+        expectOrder = Order.builder()
+                .user(expectUser)
                 .build();
 
-        actualOrderList = new ArrayList<>(1);
-        actualOrderList.add(actualOrder);
+        expectOrderList = new ArrayList<>(1);
+        expectOrderList.add(expectOrder);
 
-        when(orderRepository.save(any())).thenReturn(actualOrder);
-        when(orderRepository.findById(any())).thenReturn(Optional.ofNullable(actualOrder));
-        when(orderRepository.findAllByUserId(any())).thenReturn(actualOrderList);
-        when(userRepository.findByEmail(any())).thenReturn(actualUser);
+        when(orderRepository.save(any())).thenReturn(expectOrder);
+        when(orderRepository.findById(any())).thenReturn(Optional.ofNullable(expectOrder));
+        when(orderRepository.findAllByUserId(any())).thenReturn(expectOrderList);
+        when(userRepository.findByEmail(any())).thenReturn(expectUser);
 
     }
 
@@ -73,7 +73,7 @@ class OrderServiceTest {
         // given
         Order givenOrder = Order.builder().build();
         // when
-        Order expectOrder = orderService.save(givenOrder, actualUser);
+        Order actualOrder = orderService.save(givenOrder, expectUser);
         // then
         assertAll(()->assertEquals(expectOrder, actualOrder));
     }
@@ -84,7 +84,7 @@ class OrderServiceTest {
         // given
 
         // when
-        Order expectOrder = orderService.findById(givenId);
+        Order actualOrder = orderService.findById(givenId);
         // then
         assertAll(() -> assertEquals(expectOrder, actualOrder));
     }
@@ -95,7 +95,7 @@ class OrderServiceTest {
         // given
         String givenEmail = "user@email.com";
         // when
-        List<Order> expectOrderList = orderService.findAllByEmail(givenEmail);
+        List<Order> actualOrderList = orderService.findAllByEmail(givenEmail);
         // then
         assertAll(() -> assertEquals(expectOrderList, actualOrderList));
     }

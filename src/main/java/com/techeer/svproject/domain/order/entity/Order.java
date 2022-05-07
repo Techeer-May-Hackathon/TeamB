@@ -2,10 +2,7 @@ package com.techeer.svproject.domain.order.entity;
 
 import com.techeer.svproject.domain.product.entity.Product;
 import com.techeer.svproject.domain.user.User;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -17,6 +14,7 @@ import java.util.UUID;
 @Getter
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "orderlist")
 public class Order {
     @Id
