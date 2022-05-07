@@ -80,7 +80,7 @@ public class ProductRepositoryTest {
     }
 
     @Test
-    @DisplayName("Product save")
+    @DisplayName("Product repository save")
     void save() {
         // given
         
@@ -91,7 +91,7 @@ public class ProductRepositoryTest {
     }
     
     @Test
-    @DisplayName("product find by id")
+    @DisplayName("product repository find by id")
     void findById() {
         // given
         
@@ -107,7 +107,7 @@ public class ProductRepositoryTest {
 
     @Transactional
     @Test
-    @DisplayName("product find all test")
+    @DisplayName("product repository find all test")
     void findAll() {
         // given
         
@@ -131,7 +131,7 @@ public class ProductRepositoryTest {
     }
     
     @Test
-    @DisplayName("")
+    @DisplayName("product repository find by order id")
     void findByOrderId() {
         // given
         
@@ -146,7 +146,7 @@ public class ProductRepositoryTest {
 
     @Transactional
     @Test
-    @DisplayName("product delete test")
+    @DisplayName("product repository delete test")
     void delete() {
         // given
         

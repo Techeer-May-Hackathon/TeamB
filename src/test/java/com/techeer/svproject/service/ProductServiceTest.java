@@ -7,9 +7,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 public class ProductServiceTest {
+
     @Test
-    @DisplayName("")
-    void ProductServiceTest() {
+    @DisplayName("product save ")
+    void save() {
         // given
 
         // when
