@@ -59,3 +59,6 @@ hs_err_pid*
 
 # env
 .env
+
+# docker-compose
+docker-compose.yml
