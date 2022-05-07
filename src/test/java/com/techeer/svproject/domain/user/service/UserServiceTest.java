@@ -1,4 +1,4 @@
-package com.techeer.svproject.service;
+package com.techeer.svproject.domain.user.service;
 
 import com.techeer.svproject.domain.address.Address;
 import com.techeer.svproject.domain.address.AddressRepository;
@@ -8,7 +8,6 @@ import com.techeer.svproject.domain.user.UserRepository;
 import com.techeer.svproject.domain.user.dto.UserRequestUpdateDto;
 import com.techeer.svproject.domain.user.dto.UserResponseDto;
 import com.techeer.svproject.domain.user.dto.UserSaveDto;
-import com.techeer.svproject.domain.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package com.techeer.svproject.repository;
+package com.techeer.svproject.domain.user.repository;
 
 import com.techeer.svproject.domain.user.User;
 import com.techeer.svproject.domain.user.UserRepository;
