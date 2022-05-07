@@ -56,10 +56,10 @@ public class ProductRepositoryTest {
         Address savedAddress = addressRepository.save(givenAddress);
 
         givenUser = User.builder()
-                .lastName("")
-                .firstName("")
-                .email("")
-                .password("")
+                .lastName("최")
+                .firstName("우석")
+                .email("wschoe@mail.com")
+                .password("1234")
                 .phoneNumber(12341234)
                 .address(savedAddress)
                 .build();
