@@ -1,11 +1,10 @@
-package com.techeer.svproject.repository;
+package com.techeer.svproject.domain.product.repository;
 
 import com.techeer.svproject.domain.address.Address;
 import com.techeer.svproject.domain.address.AddressRepository;
 import com.techeer.svproject.domain.order.entity.Order;
 import com.techeer.svproject.domain.order.repository.OrderRepository;
 import com.techeer.svproject.domain.product.entity.Product;
-import com.techeer.svproject.domain.product.repository.ProductRepository;
 import com.techeer.svproject.domain.user.User;
 import com.techeer.svproject.domain.user.UserRepository;
 import org.junit.jupiter.api.Assertions;

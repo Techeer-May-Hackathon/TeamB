@@ -1,4 +1,4 @@
-package com.techeer.svproject.service;
+package com.techeer.svproject.domain.product.service;
 
 import com.techeer.svproject.domain.address.Address;
 import com.techeer.svproject.domain.order.entity.Order;
@@ -7,7 +7,6 @@ import com.techeer.svproject.domain.product.dto.ProductSaveDto;
 import com.techeer.svproject.domain.product.dto.ProductUpdateDto;
 import com.techeer.svproject.domain.product.entity.Product;
 import com.techeer.svproject.domain.product.repository.ProductRepository;
-import com.techeer.svproject.domain.product.service.ProductService;
 import com.techeer.svproject.domain.user.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
