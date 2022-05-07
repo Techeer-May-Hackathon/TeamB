@@ -13,7 +13,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,13 +26,7 @@ class OrderRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
-    private UUID givenId;
-
-    private User givenUser;
-
     private User savedUser;
-
-    private LocalDateTime givenLocalDateTime;
 
     private Order givenOrder;
 
@@ -42,9 +35,7 @@ class OrderRepositoryTest {
     @BeforeEach
     void setup() {
 
-        givenId = new UUID(10L, 10L);
-
-        givenUser = User.builder()
+        User givenUser = User.builder()
                 .firstName("김")
                 .lastName("영준")
                 .email("Over@naver.com")
@@ -52,10 +43,10 @@ class OrderRepositoryTest {
                 .phoneNumber(1023132312)
                 .address(null)
                 .build();
-        
+
         savedUser = userRepository.save(givenUser);
 
-        givenLocalDateTime = LocalDateTime.now();
+        LocalDateTime givenLocalDateTime = LocalDateTime.now();
 
         givenOrder = Order.builder()
                 .user(savedUser)
