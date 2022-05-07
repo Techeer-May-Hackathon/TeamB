@@ -19,6 +19,7 @@ configurations {
 	runtimeClasspath {
 		extendsFrom developmentOnly
 	}
+
 }
 
 ext {
@@ -93,7 +94,7 @@ jacocoTestCoverageVerification {
 				minimum = 0.00
 			}
 
-			excludes = ["*.dto", "*.dto.*", "*.BackApplication", "*.config.*", "*.exceptions.*", "*.util.*"]
+			excludes = ["*Dto*", "*.dto.*", "*.SvProjectApplication*", "*.config.*", "*.exceptions.*", "*.util.*"]
 		}
 	}
 }
