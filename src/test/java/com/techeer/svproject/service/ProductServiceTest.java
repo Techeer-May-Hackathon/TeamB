@@ -39,11 +39,9 @@ public class ProductServiceTest {
     private OrderRepository orderRepository;
 
     private Product givenProduct;
-    private Product savedProduct;
     private Order givenOrder;
     private User givenUser;
     private Address givenAddress;
-    private Order savedOrder;
 
     private UUID givenId;
     private UUID givenOrderId;
@@ -79,9 +77,8 @@ public class ProductServiceTest {
 
         when(orderRepository.findById(any())).thenReturn(Optional.of(givenOrder));
         when(productRepository.findById(any())).thenReturn(Optional.of(givenProduct));
+        when(productRepository.save(any())).thenReturn(givenProduct);
 
-        givenId = givenProduct.getId();
-        givenOrderId = givenOrder.getId();
     }
 
     @Test
@@ -96,16 +93,13 @@ public class ProductServiceTest {
                 .build();
 
         // when
-        Product product = productSaveDto.toEntity();
-        Order order = orderRepository.findById(givenOrderId).get();
-        product.setOrder(order);
+        Product product = productService.save(productSaveDto);
 
         // then
         assertAll(
-                () -> Assertions.assertEquals(givenProduct.getId(),product.getId()),
-                () -> Assertions.assertEquals(givenProduct.getOrder(),product.getOrder()),
-                () -> Assertions.assertEquals(givenProduct.getProductName(),product.getProductName()),
-                () -> Assertions.assertEquals(givenProduct.getPrice(),product.getPrice())
+                () -> Assertions.assertEquals(givenProduct.getOrder(), product.getOrder()),
+                () -> Assertions.assertEquals(givenProduct.getProductName(), product.getProductName()),
+                () -> Assertions.assertEquals(givenProduct.getPrice(), product.getPrice())
         );
     }
 
@@ -119,10 +113,9 @@ public class ProductServiceTest {
                 .price(20000)
                 .productName("변경된이름")
                 .build();
-        Product product = productRepository.findById(givenId).get();
 
         // when
-        product.update(productUpdateDto.getPrice(),productUpdateDto.getProductName());
+        Product product = productService.update(givenId, productUpdateDto);
 
         // then
         assertAll(
