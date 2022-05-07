@@ -9,10 +9,12 @@ import javax.persistence.*;
 import java.util.Set;
 import java.util.UUID;
 
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Setter
 @Table(name = "account")
 public class User {
 
