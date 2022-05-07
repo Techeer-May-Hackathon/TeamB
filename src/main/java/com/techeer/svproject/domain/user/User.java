@@ -2,19 +2,18 @@ package com.techeer.svproject.domain.user;
 
 import com.techeer.svproject.domain.address.Address;
 import com.techeer.svproject.domain.order.entity.Order;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Set;
 import java.util.UUID;
 
+
 @Getter
 @NoArgsConstructor
 @Entity
+@Setter
 @Table(name = "account")
 public class User {
 

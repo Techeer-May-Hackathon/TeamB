@@ -1,6 +1,5 @@
 package com.techeer.svproject.domain.user.service;
 
-import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import com.techeer.svproject.domain.user.User;
 import com.techeer.svproject.domain.user.UserRepository;
@@ -14,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
-import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -23,7 +21,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public UUID save(UserSaveDto userSaveDto) {
+    public User save(UserSaveDto userSaveDto) {
         String encodedPassword = Hashing.sha256().hashString(userSaveDto.getPassword(), StandardCharsets.UTF_8).toString();
 
         User user = User.builder()
@@ -34,10 +32,10 @@ public class UserService {
                 .password(encodedPassword)
                 .build();
         user.setAddress(userSaveDto.getAddress().toEntity());
-        return userRepository.save(user).getId();
+        return userRepository.save(user);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) //
     public List<UserResponseDto> findAll() {
         return userRepository.findAll()
                 .stream()
@@ -45,7 +43,7 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) //
     public UserResponseDto findByEmail(String email) {
         User user = userRepository.findByEmail(email);
         return UserResponseDto.fromEntity(user);
@@ -76,6 +74,5 @@ public class UserService {
                 requestDto.getAddress());
         userRepository.save(user);
         return user.getId();
-
     }
 }

@@ -4,8 +4,8 @@ import com.techeer.svproject.domain.address.service.AddressService;
 import com.techeer.svproject.domain.user.dto.UserRequestUpdateDto;
 import com.techeer.svproject.domain.user.dto.UserResponseDto;
 import com.techeer.svproject.domain.user.dto.UserResponseIdDto;
-import com.techeer.svproject.domain.user.service.UserService;
 import com.techeer.svproject.domain.user.dto.UserSaveDto;
+import com.techeer.svproject.domain.user.service.UserService;
 import com.techeer.svproject.global.utils.dto.ErrorResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,7 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import static com.techeer.svproject.global.utils.Constants.API_PREFIX;
@@ -32,7 +31,7 @@ public class UserController {
 
             return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(UserResponseIdDto.fromEntity(this.userService.save(requestDTO)));
+                    .body(UserResponseIdDto.fromEntity(this.userService.save(requestDTO).getId()));
         }
         catch(Exception e){
             if(userService.checkEmailDuplicate(requestDTO.getEmail())) {
