@@ -2,11 +2,6 @@ package com.techeer.svproject.repository;
 
 import com.techeer.svproject.domain.address.Address;
 import com.techeer.svproject.domain.address.AddressRepository;
-import com.techeer.svproject.domain.order.entity.Order;
-import com.techeer.svproject.domain.product.entity.Product;
-import com.techeer.svproject.domain.product.repository.ProductRepository;
-import com.techeer.svproject.domain.user.User;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import javax.persistence.EntityExistsException;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
