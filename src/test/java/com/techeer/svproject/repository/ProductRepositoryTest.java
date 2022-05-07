@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
+
 @DataJpaTest
 public class ProductRepositoryTest {
 
@@ -100,8 +102,10 @@ public class ProductRepositoryTest {
         // then
         if(findProduct.isPresent()) {
             Product product = findProduct.get();
-            Assertions.assertEquals(givenProduct,product);
-            Assertions.assertEquals(givenProduct.getId(),product.getId());
+            assertAll(
+                    () -> Assertions.assertEquals(givenProduct,product),
+                    () -> Assertions.assertEquals(givenProduct.getId(),product.getId())
+            );
         }
     }
 
