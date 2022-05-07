@@ -5,11 +5,9 @@ services:
     ports:
       - 8080:8080
     depends_on:
-      - mysqldb
-    networks:
-      - network-tier
+      - mysql
 
-  mysqldb:
+  mysql:
     image: mysql:5.7
     container_name: sv-project-mysqldb
     environment:
@@ -27,11 +25,7 @@ services:
 
     ports:
       - "3306:3306"
-    networks:
-      - network-tier
     platform: linux/amd64
 
-networks:
-  network-tier:
-    external: true
-
+volumes:
+  mysql-data:
