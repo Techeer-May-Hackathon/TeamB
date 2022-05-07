@@ -3,7 +3,6 @@ package com.techeer.svproject.domain.order.repository;
 import com.techeer.svproject.domain.order.entity.Order;
 import com.techeer.svproject.domain.user.User;
 import com.techeer.svproject.domain.user.UserRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,8 +13,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
 
 @DataJpaTest
 @DisplayName("오더 리포지토리 테스트")
@@ -26,11 +26,11 @@ class OrderRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
-    private User savedUser;
+    private User actualUser;
 
     private Order givenOrder;
 
-    private Order savedOrder;
+    private Order actualOrder;
 
     @BeforeEach
     void setup() {
@@ -44,15 +44,15 @@ class OrderRepositoryTest {
                 .address(null)
                 .build();
 
-        savedUser = userRepository.save(givenUser);
+        actualUser = userRepository.save(givenUser);
 
         LocalDateTime givenLocalDateTime = LocalDateTime.now();
 
         givenOrder = Order.builder()
-                .user(savedUser)
+                .user(actualUser)
                 .orderDate(givenLocalDateTime)
                 .build();
-        savedOrder = orderRepository.save(givenOrder);
+        actualOrder = orderRepository.save(givenOrder);
     }
 
     @Test
@@ -61,7 +61,7 @@ class OrderRepositoryTest {
         // given
 
         // when
-        Order expectOrder = orderRepository.findById(savedOrder.getId()).get();
+        Order expectOrder = orderRepository.findById(actualOrder.getId()).get();
         // then
         assertAll(
                 () -> assertEquals(expectOrder, givenOrder)
@@ -82,20 +82,20 @@ class OrderRepositoryTest {
     }
 
     private Order deleteSomething() {
-        orderRepository.delete(savedOrder);
-        return orderRepository.findById(savedOrder.getId()).get();
-
+        orderRepository.delete(actualOrder);
+        return orderRepository.findById(actualOrder.getId()).get();
     }
 
     @Test
-    @DisplayName("삭제")
-    void delete() {
+    @DisplayName("존재하지 않는 엔티티를 검색 할 때")
+    void findDeletedOrder() {
         // given
 
         // when
+
         // then
         assertAll(
-                () -> Assertions.assertThrows(NoSuchElementException.class, this::deleteSomething)
+                () -> assertThrows(NoSuchElementException.class, this::deleteSomething)
         );
     }
 
@@ -105,8 +105,21 @@ class OrderRepositoryTest {
         // given
 
         // when
-        List<Order> expectOrderList = orderRepository.findAllByUserId(savedUser.getId());
+        List<Order> expectOrderList = orderRepository.findAllByUserId(actualUser.getId());
         // then
-        assertAll(() -> expectOrderList.forEach(expect -> assertEquals(expect, savedOrder)));
+        assertAll(() -> expectOrderList.forEach(expectOrder -> assertEquals(expectOrder, actualOrder)));
+    }
+
+    @Test
+    @DisplayName("삭제")
+    void delete() {
+        // given
+        OrderRepository testOrderRepository = mock(OrderRepository.class);
+        doNothing().when(testOrderRepository).delete(givenOrder);
+        // when
+        testOrderRepository.delete(givenOrder);
+        // then
+        verify(testOrderRepository, times(1)).delete(givenOrder);
+
     }
 }
