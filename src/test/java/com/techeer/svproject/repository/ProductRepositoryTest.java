@@ -80,7 +80,7 @@ public class ProductRepositoryTest {
     }
 
     @Test
-    @DisplayName("Product 저장 테스트")
+    @DisplayName("Product save")
     void save() {
         // given
         
