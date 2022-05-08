@@ -2,8 +2,8 @@ package com.techeer.svproject.domain.address.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.techeer.svproject.domain.address.Address;
-import com.techeer.svproject.domain.address.AddressRepository;
 import com.techeer.svproject.domain.address.dto.request.AddressCreateDto;
+import com.techeer.svproject.domain.address.dto.request.AddressUpdateDto;
 import com.techeer.svproject.domain.address.service.AddressService;
 import com.techeer.svproject.domain.user.dto.UserSaveDto;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,9 +35,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(RestDocumentationExtension.class)
 @WebMvcTest(controllers = AddressController.class)
 class AddressControllerTest {
-    
-    @MockBean
-    protected AddressRepository addressRepository;
 
     @MockBean
     protected AddressService addressService;
@@ -47,6 +44,7 @@ class AddressControllerTest {
     private MockMvc mockMvc;
 
     private AddressCreateDto addressCreateDto;
+    private AddressUpdateDto addressUpdateDto;
     private UserSaveDto userSaveDto;
 
     @BeforeEach
@@ -61,6 +59,12 @@ class AddressControllerTest {
                 .build();
 
         addressCreateDto = AddressCreateDto.builder()
+                .state("state")
+                .city("city")
+                .zipcode(12345)
+                .street("street").build();
+
+        addressUpdateDto = AddressUpdateDto.builder()
                 .state("state")
                 .city("city")
                 .zipcode(12345)
@@ -96,6 +100,21 @@ class AddressControllerTest {
                     .andDo(AddressDocument.getAddress());
     }
 
+    @Test
+    void updateAddress() throws Exception {
+        //given
+        Address givenAddress = addressCreateDto.toEntity();
+        givenAddress.setAddressId(UUID.randomUUID());
 
+        //when
+        when(addressService.updateAddress(any(),any())).thenReturn(givenAddress);
 
+        //then
+        mockMvc.perform(RestDocumentationRequestBuilders.put("/api/v1/address-list/{address-id}",UUID.randomUUID())
+                        .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(addressUpdateDto)))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(AddressDocument.updateAddress());
+    }
 }

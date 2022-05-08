@@ -10,7 +10,7 @@ plugins {
 group = 'com.techeer'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
-
+[compileTestJava,compileJava]*.options*.encoding = 'UTF-8'
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
@@ -96,8 +96,7 @@ jacocoTestCoverageVerification {
 				value = 'COVEREDRATIO'
 				minimum = 0.00
 			}
-
-			excludes = ["*Dto*", "*.dto.*", "*.SvProjectApplication*", "*.config.*", "*.exceptions.*", "*.util.*"]
+			excludes = ["*Dto*", "*.dto.*", "*.SvProjectApplication*", "*.config.*", "*.exceptions.*", "*.utils.*"]
 		}
 	}
 }
