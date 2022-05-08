@@ -1,10 +1,7 @@
 package com.techeer.svproject.domain.product.entity;
 
 import com.techeer.svproject.domain.order.entity.Order;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -13,6 +10,7 @@ import java.util.UUID;
 @Getter @Setter
 @NoArgsConstructor
 @Entity
+@AllArgsConstructor
 @Table(name = "productlist")
 public class Product {
 

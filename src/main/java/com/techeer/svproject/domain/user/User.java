@@ -48,7 +48,7 @@ public class User {
     private Set<Order> orders;
 
     @Builder
-    public User(String lastName, String firstName, String email, String password, Integer phoneNumber, Address address) {
+    public User(UUID userId, String lastName, String firstName, String email, String password, Integer phoneNumber, Address address) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.email = email;

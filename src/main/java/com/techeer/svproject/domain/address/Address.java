@@ -1,12 +1,10 @@
 package com.techeer.svproject.domain.address;
-import lombok.Builder;
-import lombok.Setter;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.util.UUID;
 
+@AllArgsConstructor
 @Setter
 @Getter
 @NoArgsConstructor
