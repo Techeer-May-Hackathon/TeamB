@@ -9,8 +9,8 @@ import static org.springframework.restdocs.request.RequestDocumentation.*;
 
 public class OrderDocument {
 
-    public static RestDocumentationResultHandler postOrder() {
-        return MockMvcRestDocumentation.document("api/v1/order-post",
+    public static RestDocumentationResultHandler createOrder() {
+        return MockMvcRestDocumentation.document("api/v1/orders",
                 requestFields(
                         fieldWithPath("id").type(JsonFieldType.STRING).description("orderId valueOf UUID as String"),
                         fieldWithPath("userId").type(JsonFieldType.STRING).description("userId valueOf UUID as String"),
@@ -24,42 +24,36 @@ public class OrderDocument {
         );
     }
 
-    public static RestDocumentationResultHandler getAllOrder() {
-        return MockMvcRestDocumentation.document("api/v1/order-get-all",
+    public static RestDocumentationResultHandler findAllOrderByEmil() {
+        return MockMvcRestDocumentation.document("api/v1/orders",
                 requestParameters(
                         parameterWithName("userEmail").description("The page to retrieve")
                 ),
                 responseFields(
-                        fieldWithPath("id").type(JsonFieldType.STRING).description("orderId valueOf UUID as String"),
-                        fieldWithPath("userId").type(JsonFieldType.STRING).description("userId valueOf UUID as String"),
-                        fieldWithPath("orderDate").type(JsonFieldType.STRING).description("orderDate valueOf date-time as String")
+                        fieldWithPath("[].id").type(JsonFieldType.STRING).description("orderId valueOf UUID as String"),
+                        fieldWithPath("[].userId").type(JsonFieldType.STRING).description("userId valueOf UUID as String"),
+                        fieldWithPath("[].orderDate").type(JsonFieldType.STRING).description("orderDate valueOf date-time as String")
                 )
         );
     }
 
     public static RestDocumentationResultHandler getOneOrder() {
-        return MockMvcRestDocumentation.document("api/v1/orders/{id}",
+        return MockMvcRestDocumentation.document("api/v1/orders",
                 pathParameters(
-                        parameterWithName("id").description("The page to retrieve")
-                )
-//                ,
-//                responseFields(
-//                        fieldWithPath("id").type(JsonFieldType.STRING).description("orderId valueOf UUID as String"),
-//                        fieldWithPath("userId").type(JsonFieldType.STRING).description("userId valueOf UUID as String"),
-//                        fieldWithPath("orderDate").type(JsonFieldType.VARIES).description("orderDate valueOf date-time as String")
-//                )
-        );
-    }
-
-    public static RestDocumentationResultHandler deleteOrder() {
-        return MockMvcRestDocumentation.document("api/v1/order-delete",
-                requestParameters(
                         parameterWithName("id").description("The page to retrieve")
                 ),
                 responseFields(
                         fieldWithPath("id").type(JsonFieldType.STRING).description("orderId valueOf UUID as String"),
                         fieldWithPath("userId").type(JsonFieldType.STRING).description("userId valueOf UUID as String"),
                         fieldWithPath("orderDate").type(JsonFieldType.STRING).description("orderDate valueOf date-time as String")
+                )
+        );
+    }
+
+    public static RestDocumentationResultHandler deleteOrder() {
+        return MockMvcRestDocumentation.document("api/v1/orders",
+                pathParameters(
+                        parameterWithName("id").description("The page to retrieve")
                 )
         );
     }

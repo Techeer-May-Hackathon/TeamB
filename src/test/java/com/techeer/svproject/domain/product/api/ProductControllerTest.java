@@ -2,8 +2,8 @@ package com.techeer.svproject.domain.product.api;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.techeer.svproject.api.AddressDocument;
 import com.techeer.svproject.domain.address.Address;
+import com.techeer.svproject.domain.address.controller.AddressDocument;
 import com.techeer.svproject.domain.order.entity.Order;
 import com.techeer.svproject.domain.product.controller.ProductController;
 import com.techeer.svproject.domain.product.dto.ProductSaveDto;

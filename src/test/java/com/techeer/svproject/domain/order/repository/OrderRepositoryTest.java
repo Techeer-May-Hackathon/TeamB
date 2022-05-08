@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 @DataJpaTest
 @DisplayName("오더 리포지토리 테스트")
@@ -81,7 +80,7 @@ class OrderRepositoryTest {
         );
     }
 
-    private Order deleteSomething() {
+    private Order deleteSomethingAndFindOne() {
         orderRepository.delete(expectOrder);
         return orderRepository.findById(expectOrder.getId()).get();
     }
@@ -95,7 +94,7 @@ class OrderRepositoryTest {
 
         // then
         assertAll(
-                () -> assertThrows(NoSuchElementException.class, this::deleteSomething)
+                () -> assertThrows(NoSuchElementException.class, this::deleteSomethingAndFindOne)
         );
     }
 
@@ -113,15 +112,16 @@ class OrderRepositoryTest {
 //        assertAll(() -> actualOrderList.forEach(actualOrder -> assertEquals(expectOrder, actualOrder)));
     }
 
+    private void deleteSomething() {
+        orderRepository.delete(expectOrder);
+    }
+
     @Test
     @DisplayName("삭제")
     void delete() {
         // given
-        OrderRepository testOrderRepository = mock(OrderRepository.class);
-        doNothing().when(testOrderRepository).delete(givenOrder);
         // when
-        testOrderRepository.delete(givenOrder);
         // then
-        verify(testOrderRepository, times(1)).delete(givenOrder);
+        assertDoesNotThrow(this::deleteSomething);
     }
 }

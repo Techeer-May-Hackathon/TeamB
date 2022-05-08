@@ -1,7 +1,6 @@
 package com.techeer.svproject.domain.order.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.techeer.svproject.domain.order.dto.OrderCreateDto;
 import com.techeer.svproject.domain.order.dto.OrderMapper;
 import com.techeer.svproject.domain.order.dto.OrderResponseDto;
 import com.techeer.svproject.domain.order.entity.Order;
@@ -13,13 +12,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
@@ -31,30 +27,22 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import static com.techeer.svproject.domain.order.controller.OrderDocument.*;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @ExtendWith(RestDocumentationExtension.class)
-@WebMvcTest(controllers = OrderControllerTest.class)
+@WebMvcTest(controllers = OrderController.class)
 @AutoConfigureRestDocs
 class OrderControllerTest {
-
-    @InjectMocks
-    private OrderController orderController;
 
     @MockBean
     private UserService userService;
@@ -71,11 +59,11 @@ class OrderControllerTest {
 
     private static final UUID givenId = new UUID(10L, 10L);
 
-    private static final LocalDateTime givenLocalDateTime = LocalDateTime.now();
+    private static LocalDateTime givenLocalDateTime;
 
     private Order expectOrder;
 
-    private OrderResponseDto expectOrderResponseDto;
+    private Map<String, String> expectOrderResponseJson;
 
     @BeforeEach
     void setup(WebApplicationContext context, RestDocumentationContextProvider provider) {
@@ -88,10 +76,19 @@ class OrderControllerTest {
                 .apply(MockMvcRestDocumentation.documentationConfiguration(provider))
                 .build();
 
-        User givenUser = new User(givenId, "김", "영준", "Over@naver.com", "qwer12345!", 1023132312, null, null);
+        givenLocalDateTime = LocalDateTime.now();
+
+        User givenUser = new User(givenId, "김", "영준", "Over@naver.com",
+                "qwer12345!", 1023132312, null, null);
+
         expectOrder = new Order(givenId, givenUser, Set.of(Product.builder().build()), givenLocalDateTime);
 
-        expectOrderResponseDto = OrderResponseDto.builder()
+        expectOrderResponseJson = new HashMap<>();
+        expectOrderResponseJson.put("id", givenId.toString());
+        expectOrderResponseJson.put("userId", givenId.toString());
+        expectOrderResponseJson.put("orderDate", givenLocalDateTime.toString());
+
+        OrderResponseDto givenRequest = OrderResponseDto.builder()
                 .id(givenId)
                 .userId(givenId)
                 .orderDate(givenLocalDateTime)
@@ -101,7 +98,7 @@ class OrderControllerTest {
         when(orderService.findById(any())).thenReturn(expectOrder);
 
         when(orderMapper.toEntity(any())).thenReturn(expectOrder);
-        when(orderMapper.toResponseDto(any())).thenReturn(expectOrderResponseDto);
+        when(orderMapper.toResponseDto(any())).thenReturn(givenRequest);
 
         when(userService.findById(any())).thenReturn(givenUser);
 
@@ -111,81 +108,69 @@ class OrderControllerTest {
     @DisplayName("컨트롤러 save")
     void save() throws Exception {
         //given
-        OrderCreateDto givenOrderCreateDto = OrderCreateDto.builder()
-                .id(givenId)
-                .userId(givenId)
-                .orderDate(givenLocalDateTime)
-                .build();
-
-//        ResponseEntity expectResponseEntity = new ResponseEntity<>(expectOrderResponseDto, HttpStatus.CREATED);
+        Map<String, String> givenJson = new HashMap<>();
+        givenJson.put("id", givenId.toString());
+        givenJson.put("userId", givenId.toString());
+        givenJson.put("orderDate", givenLocalDateTime.toString());
         //when
-//        ResponseEntity actualResponseEntity = orderController.save(givenOrderCreateDto);
         //then
-//        assertEquals(expectResponseEntity, actualResponseEntity);
         mockMvc.perform(post("/api/v1/orders")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(givenOrderCreateDto)))
+                        .content(objectMapper.writeValueAsString(givenJson)))
                 .andExpect(status().isCreated())
+                .andExpect(content().json(objectMapper.writeValueAsString(expectOrderResponseJson)))
                 .andDo(print())
-                .andDo(postOrder());
-
+                .andDo(createOrder());
     }
 
     @Test
     @DisplayName("컨트롤러 ID로 조회")
     void getDetail() throws Exception {
-        // given
-//        ResponseEntity actualResponseEntity = ResponseEntity.ok().body(expectOrderResponseDto);
-        // when
-//        ResponseEntity expectResponseEntity = orderController.getDetail(givenId);
-        // then
-//        assertEquals(expectResponseEntity, actualResponseEntity);
         mockMvc.perform(get("/api/v1/orders/{id}", givenId.toString())
-                        .contentType(MediaType.APPLICATION_JSON)
-//                        .param("id", String.valueOf(givenId))
-
-                )
-                .andExpect(status().isNotFound())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(getOneOrder());
     }
 
     @Test
-    void getByUserId() {
+    @DisplayName("컨트롤러 email로 조회")
+    void getByUserId() throws Exception {
         //given
+        String givenEmail = "user@email.com";
+
         List<Order> actualOrderList = new ArrayList<>(1);
         actualOrderList.add(expectOrder);
         when(orderService.findAllByEmail(any())).thenReturn(actualOrderList);
 
-        List<OrderResponseDto> actualOrderResponseList = new ArrayList<>(1);
-        actualOrderResponseList.add(OrderResponseDto.builder()
-                .id(givenId)
-                .userId(givenId)
-                .orderDate(givenLocalDateTime)
-                .build());
+        Map<String, String> givenJson = new HashMap<>();
+        givenJson.put("id", givenId.toString());
+        givenJson.put("userId", givenId.toString());
+        givenJson.put("orderDate", givenLocalDateTime.toString());
 
-        String givenEmail = "user@email.com";
+        List<Map<String, String>> actualOrderResponseJsonList = new ArrayList<>(1);
+        actualOrderResponseJsonList.add(givenJson);
 
-        ResponseEntity actualResponseEntity = new ResponseEntity<>(actualOrderResponseList, HttpStatus.ACCEPTED);
         //when
-        ResponseEntity expectResponseEntity = orderController.getByUserId(givenEmail);
         //then
-        assertAll(
-                () -> assertEquals(expectResponseEntity.getStatusCode(), actualResponseEntity.getStatusCode()),
-                () -> assertEquals(expectResponseEntity.getBody().getClass(), actualResponseEntity.getBody().getClass())
-                // 객체 비교 수준의 테스트 코드, 좋지 않음
-        );
+        mockMvc.perform(get("/api/v1/orders")
+                        .param("userEmail", givenEmail))
+                .andExpect(status().isAccepted())
+                .andExpect(content().json(objectMapper.writeValueAsString(actualOrderResponseJsonList)))
+                .andDo(print())
+                .andDo(findAllOrderByEmil());
     }
 
     @Test
-    @DisplayName("삭제")
-    void deleteOrder() {
+    @DisplayName("컨트롤러 ID로 삭제")
+    void deleteOrder() throws Exception {
         //given
         doNothing().when(orderService).delete(any());
-        ResponseEntity actualResponseEntity = ResponseEntity.ok().build();
         //when
-        ResponseEntity<OrderResponseDto> expectResponseEntity = orderController.deleteOrder(givenId);
         //then
-        assertEquals(expectResponseEntity, actualResponseEntity);
+        mockMvc.perform(delete("/api/v1/orders/{id}", givenId.toString()))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(OrderDocument.deleteOrder());
     }
 }
