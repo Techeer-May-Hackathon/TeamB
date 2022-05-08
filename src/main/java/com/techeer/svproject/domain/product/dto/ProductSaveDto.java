@@ -1,13 +1,11 @@
 package com.techeer.svproject.domain.product.dto;
 
 import com.techeer.svproject.domain.product.entity.Product;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 
+@Setter
 @Getter
 @Builder
 @AllArgsConstructor
