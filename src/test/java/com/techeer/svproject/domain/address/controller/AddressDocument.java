@@ -25,7 +25,7 @@ public class AddressDocument {
     }
     public static RestDocumentationResultHandler updateAddress() {
 
-        return document("/address-list/{address-id}",
+        return document("api/v1/address-list/{address-id}",
                 pathParameters(
                         parameterWithName("address-id").description("수정될 address Id")
                 ),
