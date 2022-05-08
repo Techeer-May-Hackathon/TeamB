@@ -1,6 +1,7 @@
 package com.techeer.svproject.domain.address.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.techeer.svproject.domain.address.Address;
 import com.techeer.svproject.domain.address.AddressRepository;
 import com.techeer.svproject.domain.address.dto.request.AddressCreateDto;
 import com.techeer.svproject.domain.address.service.AddressService;
@@ -9,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -23,6 +23,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -33,7 +34,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @ExtendWith(RestDocumentationExtension.class)
 @WebMvcTest(controllers = AddressController.class)
-@AutoConfigureRestDocs
 class AddressControllerTest {
     
     @MockBean
@@ -80,8 +80,14 @@ class AddressControllerTest {
     @Test
     @DisplayName("address 조회")
     void get_user_profile_success() throws Exception {
+        //given
+        Address givenAddress = addressCreateDto.toEntity();
+        givenAddress.setAddressId(UUID.randomUUID());
 
-        when(addressService.getAddress(any())).thenReturn(addressCreateDto.toEntity());
+        //when
+        when(addressService.getAddress(any())).thenReturn(givenAddress);
+
+        //then
         mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/address-list")
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("userEmail", userSaveDto.getEmail()))
@@ -89,5 +95,7 @@ class AddressControllerTest {
                     .andDo(print())
                     .andDo(AddressDocument.getAddress());
     }
+
+
 
 }
