@@ -16,11 +16,11 @@ class OrderMapperTest {
 
     private final OrderMapper orderMapper = new OrderMapper();
 
-    private Order actualOrder;
+    private Order expectOrder;
 
     private final LocalDateTime givenLocalDateTime = LocalDateTime.now();
 
-    private OrderResponseDto actualOrderResponseDto;
+    private OrderResponseDto expectOrderResponseDto;
 
     @BeforeEach
     void setup() {
@@ -28,9 +28,9 @@ class OrderMapperTest {
 
         User givenUser = new User(givenId, "김", "영준", "Over@naver.com", "qwer12345!", 1023132312, null, null);
 
-        actualOrder = new Order(givenId, givenUser, null, givenLocalDateTime);
+        expectOrder = new Order(givenId, givenUser, null, givenLocalDateTime);
 
-        actualOrderResponseDto = OrderResponseDto.builder()
+        expectOrderResponseDto = OrderResponseDto.builder()
                 .id(givenId)
                 .userId(givenId)
                 .orderDate(givenLocalDateTime)
@@ -46,10 +46,10 @@ class OrderMapperTest {
                 .orderDate(givenLocalDateTime)
                 .build();
         // when
-        Order expectOrder = orderMapper.toEntity(givenOrderCreateDto);
+        Order actualOrder = orderMapper.toEntity(givenOrderCreateDto);
         // then
         assertAll(
-                () -> assertEquals(expectOrder.getOrderDate(), actualOrder.getOrderDate())
+                () -> assertEquals(actualOrder.getOrderDate(), expectOrder.getOrderDate())
         );
     }
 
@@ -59,12 +59,12 @@ class OrderMapperTest {
         // given
 
         // when
-        OrderResponseDto expectOrderResponseDto = orderMapper.toResponseDto(actualOrder);
+        OrderResponseDto actualOrderResponseDto = orderMapper.toResponseDto(expectOrder);
         // then
         assertAll(
-                () -> assertEquals(expectOrderResponseDto.getId(), actualOrderResponseDto.getId()),
-                () -> assertEquals(expectOrderResponseDto.getUserId(), actualOrderResponseDto.getUserId()),
-                () -> assertEquals(expectOrderResponseDto.getOrderDate(), actualOrderResponseDto.getOrderDate())
+                () -> assertEquals(actualOrderResponseDto.getId(), expectOrderResponseDto.getId()),
+                () -> assertEquals(actualOrderResponseDto.getUserId(), expectOrderResponseDto.getUserId()),
+                () -> assertEquals(actualOrderResponseDto.getOrderDate(), expectOrderResponseDto.getOrderDate())
         );
     }
 }

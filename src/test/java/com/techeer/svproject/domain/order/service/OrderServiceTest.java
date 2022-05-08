@@ -4,6 +4,7 @@ import com.techeer.svproject.domain.order.entity.Order;
 import com.techeer.svproject.domain.order.repository.OrderRepository;
 import com.techeer.svproject.domain.user.User;
 import com.techeer.svproject.domain.user.UserRepository;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 class OrderServiceTest {
@@ -32,15 +34,15 @@ class OrderServiceTest {
     @Mock
     private UserRepository userRepository;
 
-    private Order expectOrder;
+    private static Order expectOrder;
 
-    private User expectUser;
+    private static User expectUser;
 
-    private List<Order> expectOrderList;
-    private UUID givenId;
+    private static List<Order> expectOrderList;
+    private static UUID givenId;
 
-    @BeforeEach
-    void setup() {
+    @BeforeAll
+    static void setup() {
         givenId = new UUID(10L, 10L);
 
         expectUser = User.builder()
@@ -58,12 +60,14 @@ class OrderServiceTest {
 
         expectOrderList = new ArrayList<>(1);
         expectOrderList.add(expectOrder);
+    }
 
+    @BeforeEach
+    void setupEach() {
         when(orderRepository.save(any())).thenReturn(expectOrder);
         when(orderRepository.findById(any())).thenReturn(Optional.ofNullable(expectOrder));
         when(orderRepository.findAllByUserId(any())).thenReturn(expectOrderList);
         when(userRepository.findByEmail(any())).thenReturn(expectUser);
-
     }
 
     @Test
@@ -78,7 +82,7 @@ class OrderServiceTest {
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("ID 값으로 검색")
     void findById() {
         // given
 
@@ -89,7 +93,7 @@ class OrderServiceTest {
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("Email로 검색")
     void findAllByEmail() {
         // given
         String givenEmail = "user@email.com";
@@ -104,7 +108,7 @@ class OrderServiceTest {
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("삭제")
     void delete() {
         // given
         doNothing().when(orderRepository).delete(any());
