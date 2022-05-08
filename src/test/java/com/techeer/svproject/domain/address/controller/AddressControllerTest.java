@@ -65,6 +65,7 @@ class AddressControllerTest {
                 .street("street").build();
 
         addressUpdateDto = AddressUpdateDto.builder()
+                .addressId(UUID.randomUUID())
                 .state("state")
                 .city("city")
                 .zipcode(12345)
