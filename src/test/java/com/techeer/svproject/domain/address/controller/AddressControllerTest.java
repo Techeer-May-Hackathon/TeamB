@@ -1,8 +1,8 @@
-package com.techeer.svproject.api;
+package com.techeer.svproject.domain.address.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.techeer.svproject.domain.address.Address;
 import com.techeer.svproject.domain.address.AddressRepository;
-import com.techeer.svproject.domain.address.controller.AddressController;
 import com.techeer.svproject.domain.address.dto.request.AddressCreateDto;
 import com.techeer.svproject.domain.address.service.AddressService;
 import com.techeer.svproject.domain.user.dto.UserSaveDto;
@@ -10,13 +10,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -24,22 +23,18 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @ExtendWith(RestDocumentationExtension.class)
-@WebMvcTest(controllers = AddressControllerTest.class)
-@AutoConfigureRestDocs
+@WebMvcTest(controllers = AddressController.class)
 class AddressControllerTest {
-
-    @InjectMocks
-    private AddressController addressController;
     
     @MockBean
     protected AddressRepository addressRepository;
@@ -47,7 +42,6 @@ class AddressControllerTest {
     @MockBean
     protected AddressService addressService;
 
-    @MockBean
     private ObjectMapper objectMapper;
 
     private MockMvc mockMvc;
@@ -86,14 +80,22 @@ class AddressControllerTest {
     @Test
     @DisplayName("address 조회")
     void get_user_profile_success() throws Exception {
+        //given
+        Address givenAddress = addressCreateDto.toEntity();
+        givenAddress.setAddressId(UUID.randomUUID());
 
-        when(addressService.getAddress(any())).thenReturn(addressCreateDto.toEntity());
-        mockMvc.perform(get("/api/v1/address-list")
+        //when
+        when(addressService.getAddress(any())).thenReturn(givenAddress);
+
+        //then
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/api/v1/address-list")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .queryParam("userEmail", userSaveDto.getEmail()))
+                        .param("userEmail", userSaveDto.getEmail()))
                     .andExpect(status().isOk())
                     .andDo(print())
                     .andDo(AddressDocument.getAddress());
     }
+
+
 
 }
