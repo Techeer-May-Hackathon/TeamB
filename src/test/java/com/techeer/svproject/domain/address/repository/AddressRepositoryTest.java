@@ -1,4 +1,4 @@
-package com.techeer.svproject.repository;
+package com.techeer.svproject.domain.address.repository;
 
 import com.techeer.svproject.domain.address.Address;
 import com.techeer.svproject.domain.address.AddressRepository;
